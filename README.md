@@ -3,7 +3,7 @@ CUDA Rasterizer
 
 [CLICK ME FOR INSTRUCTION OF THIS PROJECT](./INSTRUCTION.md)
 
-**University of Pennsylvania, CIS 565: GPU Programming and Architecture, Project 3**
+**University of Pennsylvania, CIS 565: GPU Programming and Architecture, Project 4**
 
 * LINSHEN XIAO
 * Tested on: Windows 10, Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz, 16.0GB, NVIDIA GeForce GTX 970M (Personal computer)
