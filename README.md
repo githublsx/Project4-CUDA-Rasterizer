@@ -25,29 +25,34 @@ In this project, I implemented a CUDA-based path tracer capable of rendering glo
 ![](renders/duck2.gif)
 
 ### Basic Lambert and Blinn shading
+
 |Duck with texture and point light|+Blinn-Phong|+Ambient light|
 |------|------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_191958.png) | ![](renders/duck.png) |
 
 ### Basic Normal and depth shading
+
 |Duck with texture as color|Duck with normal as color|Duck with depth as color|
 |------|------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_192434.png) | ![](renders/2017-10-17_192601.png) |
 
 ### Line and point rasterization
+
 |Duck rasterized with triangles|Duck rasterized with lines|Duck rasterized with dots|
 |------|------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_192335.png) | ![](renders/2017-10-17_192404.png) |
 
 ### Backface culling
+
 |Duck rasterized with front faces|Duck rasterized with back faces|
 |------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_195707.png) |
 
 ###UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
+
 |Original Checkerboard|+Perspective correct texture coordinates|+Bilinear texture filtering|
 |------|------|------|
-|![](renders/no_pc.png)|![](renders/pc.png)|![](renders/pc_&_bl.png)|
+| ![](renders/no_pc.png) | ![](renders/pc.png) | ![](renders/pc_&_bl.png) |
 
 ## Performance Analysis
 
