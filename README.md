@@ -26,7 +26,6 @@ In this project, I used CUDA to implement a simplified rasterized graphics pipel
 
 ### Rotating Duck
 ![](renders/duck3.gif)
-
 ### Basic Lambert and Blinn shading
 
 |Duck with texture and point light|+Blinn-Phong|+Ambient light|
@@ -65,7 +64,6 @@ Let's have a closer look:
 ### Painted style render
 
 |Original Duck|"Painted style" Duck|
-
 |------|------|
 |![](renders/duck.png) | ![](renders/2017-10-17_222749.png) |
 
