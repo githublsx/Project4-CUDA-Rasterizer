@@ -97,8 +97,10 @@ void mainLoop() {
 //---------RUNTIME STUFF---------
 //-------------------------------
 float scale = 1.0f;
-float x_trans = 0.0f, y_trans = 0.0f, z_trans = -10.0f;
-float x_angle = 0.0f, y_angle = 0.0f;
+//float x_trans = 0.0f, y_trans = -0.5f, z_trans = -2.0f;
+//float x_angle = 0.0f, y_angle = 30.0f;
+float x_trans = 0.0f, y_trans = -0.8f, z_trans = -2.0f;
+float x_angle = 0.0f, y_angle = -0.8f;
 void runCuda() {
     // Map OpenGL buffer object for writing from CUDA on a single GPU
     // No data is moved (Win & Linux). When mapped to CUDA, OpenGL should not use this buffer
@@ -395,6 +397,10 @@ void mouseMotionCallback(GLFWwindow* window, double xpos, double ypos)
 
 void mouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	const double s = 1.0;	// sensitivity
-	z_trans += (float)(s * yoffset);
+	const double s = 0.1;	// sensitivity
+	int temp = z_trans + (float)(s * yoffset);
+	if (temp < -0.5)
+	{
+		z_trans += (float)(s * yoffset);
+	}
 }

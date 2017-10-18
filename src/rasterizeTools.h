@@ -90,6 +90,15 @@ bool isBarycentricCoordInBounds(const glm::vec3 barycentricCoord) {
 
 // CHECKITOUT
 /**
+* Check if a barycentric coordinate is within the boundaries of a triangle.
+*/
+__host__ __device__ static
+bool isBarycentricCoordOnBounds(const glm::vec3 barycentricCoord) {
+	return barycentricCoord.x + barycentricCoord.y + barycentricCoord.z == 1.0;
+}
+
+// CHECKITOUT
+/**
  * For a given barycentric coordinate, compute the corresponding z position
  * (i.e. depth) on the triangle.
  */
@@ -98,4 +107,45 @@ float getZAtCoordinate(const glm::vec3 barycentricCoord, const glm::vec3 tri[3])
     return -(barycentricCoord.x * tri[0].z
            + barycentricCoord.y * tri[1].z
            + barycentricCoord.z * tri[2].z);
+}
+
+__host__ __device__ static
+float getPCZAtCoordinate(const glm::vec3 barycentricCoord, const glm::vec3 tri[3]) {
+	float iz = barycentricCoord.x / tri[0].z + barycentricCoord.y / tri[1].z + barycentricCoord.z / tri[2].z;
+	return 1.0f / iz;
+}
+
+template <class T>
+__host__ __device__ static
+T BCInterpolate(glm::vec3 bc, T v0, T v1, T v2)
+{
+	return bc.x*v0 + bc.y*v1 + bc.z*v2;
+}
+
+template <class T>
+__host__ __device__ static
+T PCBCInterpolate(glm::vec3 bc, glm::vec3 tri[3], T v0, T v1, T v2)
+{
+	return bc.x*v0 / tri[0].z + bc.y*v1 / tri[1].z + bc.z*v2 / tri[2].z;
+}
+
+__host__ __device__ static
+glm::vec2 PCBCInterpolatetexcoord(glm::vec3 bc, float p0, float p1, float p2, glm::vec2 t0, glm::vec2 t1, glm::vec2 t2)
+{
+	glm::vec2 tz = bc.x * t0 / p0 + bc.y * t1 / p1 + bc.z * t2 / p2;
+	float cz = bc.x / p0 + bc.y / p1 + bc.z / p2;
+	return tz / cz;
+}
+
+//https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/single-vs-double-sided-triangle-backface-culling
+__host__ __device__ static
+bool isbackface(glm::vec3 tri[3])
+{
+	glm::vec3 e0 = tri[1] - tri[0];
+	glm::vec3 e1 = tri[2] - tri[0];
+	glm::vec3 N = glm::normalize(glm::cross(e0, e1));
+	glm::vec3 dir = glm::vec3(0.f, 0.f, -1.f);
+	if (glm::dot(dir, N) > 0)
+		return false;
+	return true;
 }
