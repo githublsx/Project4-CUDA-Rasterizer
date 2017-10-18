@@ -97,10 +97,14 @@ void mainLoop() {
 //---------RUNTIME STUFF---------
 //-------------------------------
 float scale = 1.0f;
+//for checkerboard
 //float x_trans = 0.0f, y_trans = -0.5f, z_trans = -2.0f;
 //float x_angle = 0.0f, y_angle = 30.0f;
-float x_trans = 0.0f, y_trans = -0.8f, z_trans = -2.0f;
-float x_angle = 0.0f, y_angle = -0.8f;
+//for duck
+//float x_trans = 0.0f, y_trans = -0.8f, z_trans = -2.0f;
+//float x_angle = 0.0f, y_angle = -0.8f;
+float x_trans = 0.0f, y_trans = 0.0f, z_trans = -5.0f;
+float x_angle = 0.0f, y_angle = 0.0f;
 void runCuda() {
     // Map OpenGL buffer object for writing from CUDA on a single GPU
     // No data is moved (Win & Linux). When mapped to CUDA, OpenGL should not use this buffer

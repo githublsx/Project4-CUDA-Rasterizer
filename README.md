@@ -18,7 +18,8 @@ In this project, I used CUDA to implement a simplified rasterized graphics pipel
 * Line & Point rasterization
 * Backface culling
 * SSAA
-* UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
+* Bilinear texture filtering
+* Perspective correct texture coordinates
 
 ## Results
 
@@ -65,6 +66,12 @@ Let's have a closer look:
 |Original Checkerboard|+Perspective correct texture coordinates|+Bilinear texture filtering|
 |------|------|------|
 | ![](renders/no_pc.png) | ![](renders/pc.png) | ![](renders/pc_&_bl.png) |
+
+Let's have a closer look:
+
+|No Bilinear texture filtering|+Bilinear texture filtering|+SSAA*2|
+|------|------|------|
+| ![](renders/nobfbig.png) | ![](renders/bfbig.png) | ![](renders/bfssaabig.png) |
 
 ## Performance Analysis
 
