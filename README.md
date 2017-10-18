@@ -65,6 +65,7 @@ Let's have a closer look:
 ### Painted style render
 
 |Original Duck|"Painted style" Duck|
+
 |------|------|
 |![](renders/duck.png) | ![](renders/2017-10-17_222749.png) |
 
@@ -112,3 +113,5 @@ We can see that bilinear texture filtering and perspective correctness did take 
 
 * [tinygltfloader](https://github.com/syoyo/tinygltfloader) by [@soyoyo](https://github.com/syoyo)
 * [glTF Sample Models](https://github.com/KhronosGroup/glTF/blob/master/sampleModels/README.md)
+* [Line drawing](https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm)
+* [Backface culling](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/single-vs-double-sided-triangle-backface-culling)
