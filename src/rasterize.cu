@@ -29,6 +29,7 @@
 #define POINT 0
 #define SSAA 0
 #define BACKFACE 1
+#define PAINTSTYLE 0
 
 namespace {
 
@@ -225,6 +226,14 @@ void render(int w, int h, Fragment *fragmentBuffer, glm::vec3 *framebuffer) {
 			diffuse = fragmentbuffer.color;
 		}
 		float cos = glm::dot(fragmentbuffer.eyeNor, lightdir);
+#if PAINTSTYLE
+		if (cos < 1.f && cos > 1.f / 2.f)
+			cos = 1.f;
+		else if (cos < 1.f / 2.f && cos > 1.f / 4.f)
+			cos = 2.f / 3.f;
+		else
+			cos = 1.f / 3.f;
+#endif
 		framebuffer[index] = diffuse *cos;
 		// TODO: add your fragment shader code here
 #if BLINNPHONG

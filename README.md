@@ -18,13 +18,14 @@ In this project, I used CUDA to implement a simplified rasterized graphics pipel
 * Line & Point rasterization
 * Backface culling
 * SSAA
+* Other render style(painted style)
 * Bilinear texture filtering
 * Perspective correct texture coordinates
 
 ## Results
 
 ### Rotating Duck
-![](renders/duck2.gif)
+![](renders/duck3.gif)
 
 ### Basic Lambert and Blinn shading
 
@@ -60,6 +61,12 @@ Let's have a closer look:
 |No SSAA|SSAA*2|SSAA*4|
 |------|------|------|
 |![](renders/ssaa0big.png) | ![](renders/ssaa2big.png) | ![](renders/ssaa4big.png) |
+
+### Painted style render
+
+|Original Duck|"Painted style" Duck|
+|------|------|
+|![](renders/duck.png) | ![](renders/2017-10-17_222749.png) |
 
 ### UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
 
