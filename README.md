@@ -10,13 +10,14 @@ CUDA Rasterizer
 
 ## Overview
 
-In this project, I implemented a CUDA-based path tracer capable of rendering globally-illuminated images very quickly. Path tracing is a computer graphics Monte Carlo method of rendering images of three-dimensional scenes such that the global illumination is faithful to reality (reference: https://en.wikipedia.org/wiki/Path_tracing). Basially, for every pixel of the image, we shoot a ray from the camera, find an intersection, and return a color based on the material, position of the objects & lightsource and so on after a few depths. As this process for every pixel is relatively similar, we can use GPU to run the programs simultaneously to make the path tracer faster.
+In this project, I used CUDA to implement a simplified rasterized graphics pipeline, similar to the OpenGL pipeline. I have implemented vertex shading, primitive assembly, rasterization, fragment shading, and a framebuffer.
 
 ## Features
 
 * Basic Lambert and Blinn-Phong
 * Line & Point rasterization
 * Backface culling
+* SSAA
 * UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
 
 ## Results
@@ -48,7 +49,18 @@ In this project, I implemented a CUDA-based path tracer capable of rendering glo
 |------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_195707.png) |
 
-###UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
+### SSAA
+|No SSAA|SSAA*2|SSAA*4|
+|------|------|------|
+|![](renders/duck.png) | ![](renders/ssaa2.png) | ![](renders/ssaa4.png) |
+
+Let's have a closer look:
+
+|No SSAA|SSAA*2|SSAA*4|
+|------|------|------|
+|![](renders/ssaa0big.png) | ![](renders/ssaa2big.png) | ![](renders/ssaa4big.png) |
+
+### UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
 
 |Original Checkerboard|+Perspective correct texture coordinates|+Bilinear texture filtering|
 |------|------|------|
@@ -69,6 +81,18 @@ In this project, I implemented a CUDA-based path tracer capable of rendering glo
 Here we take the duck scene as an example. We can clearly see that rasterizer use most of the time, as there are lots of computation in this process, to check if the pixel of the bounding box lies inside the triangle, depth test and compute the interpolated texture coordinates and normal and so on. The render function in fragment shader also has some amount of computation for the computation for the color decided by normal, light direction and texture color.
 
 We can see that backface culling did save time in rasterizer part. As the backface triangles are ingnored in the process, the performance did improved a bit.
+
+![](renders/NoPC&PC.png)
+
+| Pipeline                   | No bilinear texture filtering and perspective correctness  | With bilinear texture filtering and perspective correctness  |
+|----------------------------|---------------------|------------------|
+| Rasterizer                 | 1716.314            | 3049.726         |
+| Fragment Shader            | 681.287             | 717.102          |
+| Framebuffer                | 103.308             | 105.129          |
+| Primitive Assembly         | 28.59               | 28.857           |
+| Vertex Assembly and Shader | 11.014              | 11.101           |
+
+We can see that bilinear texture filtering and perspective correctness did take more time in rasterizer and fragment shader part, for the computation of perspective correct texture coordinates and averanging texture color for bilinear texture filtering did take more time than the orginal method.
 
 ### Credits
 

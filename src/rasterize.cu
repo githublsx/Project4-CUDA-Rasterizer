@@ -21,8 +21,8 @@
 #define RENDERDEPTH 0
 #define RENDERNORMAL 0
 #define RENDERTEXTURE 1
-#define PERSPECTIVECORRECT 0
-#define BILINEARFILTER 0
+#define PERSPECTIVECORRECT 1
+#define BILINEARFILTER 1
 #define BLINNPHONG 1
 #define AMBIENTLIGHT 1
 #define LINE 0
@@ -137,9 +137,24 @@ void sendImageToPBO(uchar4 *pbo, int w, int h, glm::vec3 *image) {
 
     if (x < w && y < h) {
         glm::vec3 color;
+#if SSAA
+		for (int i = 0; i < SSAA; i++)
+		{
+			for (int j = 0; j < SSAA; j++)
+			{
+				int x_ssaa = x * SSAA + i;
+				int y_ssaa = y * SSAA + j;
+				color.x += glm::clamp(image[x_ssaa + y_ssaa  * (SSAA * w)].x, 0.0f, 1.0f) * 255.0;
+				color.y += glm::clamp(image[x_ssaa + y_ssaa  * (SSAA * w)].y, 0.0f, 1.0f) * 255.0;
+				color.z += glm::clamp(image[x_ssaa + y_ssaa  * (SSAA * w)].z, 0.0f, 1.0f) * 255.0;
+			}
+		}
+		color /= (float)(SSAA*SSAA);
+#else
         color.x = glm::clamp(image[index].x, 0.0f, 1.0f) * 255.0;
         color.y = glm::clamp(image[index].y, 0.0f, 1.0f) * 255.0;
         color.z = glm::clamp(image[index].z, 0.0f, 1.0f) * 255.0;
+#endif
         // Each thread writes one pixel location in the texture (textel)
         pbo[index].w = 0;
         pbo[index].x = color.x;
@@ -234,8 +249,13 @@ void render(int w, int h, Fragment *fragmentBuffer, glm::vec3 *framebuffer) {
  * Called once at the beginning of the program to allocate memory.
  */
 void rasterizeInit(int w, int h) {
+#if SSAA
+	width = SSAA * w;
+	height = SSAA * h;
+#else
     width = w;
     height = h;
+#endif
 	cudaFree(dev_fragmentBuffer);
 	cudaMalloc(&dev_fragmentBuffer, width * height * sizeof(Fragment));
 	cudaMemset(dev_fragmentBuffer, 0, width * height * sizeof(Fragment));
@@ -923,7 +943,11 @@ void rasterize(uchar4 *pbo, const glm::mat4 & MVP, const glm::mat4 & MV, const g
 	render << <blockCount2d, blockSize2d >> >(width, height, dev_fragmentBuffer, dev_framebuffer);
 	checkCUDAError("fragment shader");
     // Copy framebuffer into OpenGL buffer for OpenGL previewing
+#if SSAA
+	sendImageToPBO << <blockCount2d, blockSize2d >> > (pbo, width / SSAA, height / SSAA, dev_framebuffer);
+#else
     sendImageToPBO<<<blockCount2d, blockSize2d>>>(pbo, width, height, dev_framebuffer);
+#endif
     checkCUDAError("copy render result to pbo");
 }
 
