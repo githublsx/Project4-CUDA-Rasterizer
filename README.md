@@ -14,19 +14,18 @@ In this project, I implemented a CUDA-based path tracer capable of rendering glo
 
 ## Features
 
-* Basic Lambert and Blinn shading
-* Line rasterization mode
-* Point rasterization mode
+* Basic Lambert and Blinn-Phong
+* Line & Point rasterization
 * Backface culling
 * UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
 
 ## Results
 
-Rotating Duck
+### Rotating Duck
 ![](renders/duck2.gif)
 
 ### Basic Lambert and Blinn shading
-|Duck with texture and point light|Duck with Blinn-Phong|Duck with Blinn-Phong & Ambient light|
+|Duck with texture and point light|+Blinn-Phong|+Ambient light|
 |------|------|------|
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_191958.png) | ![](renders/duck.png) |
 
@@ -46,15 +45,25 @@ Rotating Duck
 |![](renders/2017-10-17_191933.png) | ![](renders/2017-10-17_195707.png) |
 
 ###UV texture mapping with bilinear texture filtering and perspective correct texture coordinates
-|Original Checkerboard|Checkerboard with perspective correct texture coordinates|Checkerboard with bilinear texture filtering and perspective correct texture coordinates|
+|Original Checkerboard|+Perspective correct texture coordinates|+Bilinear texture filtering|
 |------|------|------|
-|![](renders/no_pc.png) | ![](renders/pc.png) | ![](renders/pc_&_bl.png) |
+|![](renders/no_pc.png)|![](renders/pc.png)|![](renders/pc_&_bl.png)|
 
 ## Performance Analysis
 
 ![](renders/Nobackface&backface.png)
 
-We can see that backface culling did save time in rasterizer part because it can ingnore the triangle than can not be seen.
+| Pipeline                   | No Backface Culling | Backface Culling |
+|----------------------------|---------------------|------------------|
+| Rasterizer                 | 1716.314            | 1375.803         |
+| Fragment Shader            | 681.287             | 688.537          |
+| Framebuffer                | 103.308             | 103.252          |
+| Primitive Assembly         | 28.59               | 28.632           |
+| Vertex Assembly and Shader | 11.014              | 11.004           |
+
+Here we take the duck scene as an example. We can clearly see that rasterizer use most of the time, as there are lots of computation in this process, to check if the pixel of the bounding box lies inside the triangle, depth test and compute the interpolated texture coordinates and normal and so on. The render function in fragment shader also has some amount of computation for the computation for the color decided by normal, light direction and texture color.
+
+We can see that backface culling did save time in rasterizer part. As the backface triangles are ingnored in the process, the performance did improved a bit.
 
 ### Credits
 
